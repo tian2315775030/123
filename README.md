@@ -1,232 +1,240 @@
-# 123
-十大算法
-冒泡排序
-#include "sort_.h"
 #include <stdio.h>
- 
-// 打印数组的函数（已在题目中给出）
-void print_array(int *arr, int n) {
-    if (n == 0) {
-        printf("ERROR: Array length is ZERO\n");
-        return;
-    }
-    for (int i = 0; i < n; i++) {
-        printf("%d", arr[i]);
-        if (i < n - 1) {
-            printf(" ");
-        }
-    }
-    printf("\n");
-}
- 
-// 冒泡排序算法并输出前三次冒泡操作后的序列以及最终的升序序列
-void sort_array(int *arr, int n) {
-    for (int i = 0; i < n - 1; i++) { // 外层循环，控制冒泡的轮数
-        int swapped = 0; // 标志位，用于检测是否发生了交换
- 
-        for (int j = 0; j < n - 1 - i; j++) { // 内层循环，进行实际的比较和交换操作
-            if (arr[j] > arr[j + 1]) {
-                // 交换arr[j]和arr[j + 1]
+#include <stdlib.h>
+
+// 1. 冒泡排序
+void bubble_sort(int arr[], int n) {
+    for (int i = 0; i < n-1; i++) {
+        int swapped = 0;
+        for (int j = 0; j < n-i-1; j++) {
+            if (arr[j] > arr[j+1]) {
                 int temp = arr[j];
-                arr[j] = arr[j + 1];
-                arr[j + 1] = temp;
- 
-                // 设置标志位，表示发生了交换
+                arr[j] = arr[j+1];
+                arr[j+1] = temp;
                 swapped = 1;
             }
         }
- 
-        // 输出当前冒泡操作后的数组状态（前三次）
-        if (i < 3) {
-            printf("");
-            print_array(arr, n);
-        }
+        if (!swapped) break;
     }
- 
-    // 输出最终的升序数组
-    printf("");
-    print_array(arr, n);
 }
- 
-选择排序
-#include "sort_.h"
-#include <stdio.h>
- 
-// 打印数组的函数（已在题目中给出）
-void print_array(int *arr, int n) {
-    if (n == 0) {
-        printf("ERROR: Array length is ZERO\n");
-        return;
-    }
-    for (int i = 0; i < n; i++) {
-        printf("%d", arr[i]);
-        if (i < n - 1) {
-            printf(" ");
-        }
-    }
-    printf("\n");
-}
- 
-// 选择排序算法并输出前三次选择操作后的序列以及最终的升序序列
-void sort_array(int *arr, int n) {
-    for (int i = 0; i < n - 1; i++) { // 外层循环，控制选择的轮数
-        int min_idx = i; // 假设当前元素为最小值
- 
-        // 在剩余未排序部分找到最小值的索引
-        for (int j = i + 1; j < n; j++) {
-            if (arr[j] < arr[min_idx]) {
+
+// 2. 选择排序
+void selection_sort(int arr[], int n) {
+    for (int i = 0; i < n-1; i++) {
+        int min_idx = i;
+        for (int j = i+1; j < n; j++) {
+            if (arr[j] < arr[min_idx])
                 min_idx = j;
-            }
         }
- 
-        // 交换找到的最小值和当前元素
-        if (min_idx != i) {
-            int temp = arr[i];
-            arr[i] = arr[min_idx];
-            arr[min_idx] = temp;
-        }
- 
-        // 输出当前选择操作后的数组状态（前三次）
-        if (i < 3) {
-            printf("");
-            print_array(arr, n);
-        }
+        int temp = arr[i];
+        arr[i] = arr[min_idx];
+        arr[min_idx] = temp;
     }
- 
-    // 输出最终的升序数组
-    printf("");
-    print_array(arr, n);
 }
-插入排序
-#include <stdio.h>
- 
-void print_array(int *arr, int n) {
-    for (int i = 0; i < n; i++) {
-        printf("%d", arr[i]);
-        if (i < n - 1) {
-            printf(" ");
-        }
-    }
-    printf("\n");
-}
- 
-void sort_array(int *arr, int n) {
-    int print_count = 0; // 打印计数器
- 
+
+// 3. 插入排序
+void insertion_sort(int arr[], int n) {
     for (int i = 1; i < n; i++) {
         int key = arr[i];
-        int j = i - 1;
- 
-        // 将大于key的元素向后移动
+        int j = i-1;
         while (j >= 0 && arr[j] > key) {
-            arr[j + 1] = arr[j];
+            arr[j+1] = arr[j];
             j--;
         }
-        arr[j + 1] = key; // 插入key
- 
-        // 如果打印次数少于3次，则打印当前数组
-        if (print_count < 3) {
-            print_array(arr, n);
-            print_count++;
-        }
+        arr[j+1] = key;
     }
- 
-  
-    print_array(arr, n);
-}
- 希尔排序
- #include "sort_.h"
-
-void print_array(int *arr, int n) {
-    if (n == 0) {
-        printf("ERROR: Array length is ZERO\n");
-        return;
-    }
-    printf("%d", arr[0]);
-    for (int i = 1; i < n; i++) {
-        printf(" %d", arr[i]);
-    }
-    printf("\n");
 }
 
-void sort_array(int *arr, int n) {
-    int gaps[] = {5, 2, 1}; // 前三次的增量序列
-    int gap_count = 3;
-
-    for (int k = 0; k < gap_count; k++) {
-        int d = gaps[k];
-        if (d > n) continue; // 如果增量大于数组长度，跳过
-
-        for (int i = d; i < n; i++) {
+// 4. 希尔排序
+void shell_sort(int arr[], int n) {
+    for (int gap = n/2; gap > 0; gap /= 2) {
+        for (int i = gap; i < n; i++) {
             int temp = arr[i];
-            int j = i;
-            while (j >= d && arr[j - d] > temp) {
-                arr[j] = arr[j - d];
-                j -= d;
-            }
+            int j;
+            for (j = i; j >= gap && arr[j-gap] > temp; j -= gap)
+                arr[j] = arr[j-gap];
             arr[j] = temp;
         }
-        print_array(arr, n);
     }
-    // 输出最终的升序序列
-    print_array(arr, n);
-}
-归并排序
-#include "sort_.h"
-#include <stdlib.h>
-
-void print_array(int *arr, int n) {
-    if (n == 0) {
-        printf("ERROR: Array length is ZERO\n");
-        return;
-    }
-    printf("%d", arr[0]);
-    for (int i = 1; i < n; i++) {
-        printf(" %d", arr[i]);
-    }
-    printf("\n");
 }
 
-int* merge_array(int *arr1, int n1, int *arr2, int n2) {
-    int *result = (int *)malloc((n1 + n2) * sizeof(int)); // 分配合并后的数组空间
-    int i = 0, j = 0, k = 0;
+// 5. 归并排序
+void merge(int arr[], int l, int m, int r) {
+    int n1 = m - l + 1;
+    int n2 = r - m;
+    int L[n1], R[n2];
 
-    // 双指针法合并两个有序数组
+    for (int i = 0; i < n1; i++)
+        L[i] = arr[l + i];
+    for (int j = 0; j < n2; j++)
+        R[j] = arr[m + 1 + j];
+
+    int i = 0, j = 0, k = l;
     while (i < n1 && j < n2) {
-        if (arr1[i] < arr2[j]) {
-            result[k++] = arr1[i++];
-        } else {
-            result[k++] = arr2[j++];
+        if (L[i] <= R[j]) arr[k++] = L[i++];
+        else arr[k++] = R[j++];
+    }
+    while (i < n1) arr[k++] = L[i++];
+    while (j < n2) arr[k++] = R[j++];
+}
+
+void merge_sort(int arr[], int l, int r) {
+    if (l < r) {
+        int m = l + (r - l) / 2;
+        merge_sort(arr, l, m);
+        merge_sort(arr, m+1, r);
+        merge(arr, l, m, r);
+    }
+}
+
+// 6. 快速排序
+int partition(int arr[], int low, int high) {
+    int pivot = arr[high];
+    int i = low - 1;
+    for (int j = low; j <= high-1; j++) {
+        if (arr[j] < pivot) {
+            i++;
+            int temp = arr[i];
+            arr[i] = arr[j];
+            arr[j] = temp;
         }
     }
-
-    // 将剩余部分复制到结果数组
-    while (i < n1) {
-        result[k++] = arr1[i++];
-    }
-    while (j < n2) {
-        result[k++] = arr2[j++];
-    }
-
-    return result;
+    int temp = arr[i+1];
+    arr[i+1] = arr[high];
+    arr[high] = temp;
+    return i+1;
 }
 
-int* merge_sort(int *arr, int n) {
-    if (n <= 1) {
-        int *result = (int *)malloc(n * sizeof(int));
-        if (n > 0) result[0] = arr[0]; // 处理 n=1 的情况
-        return result;
+void quick_sort(int arr[], int low, int high) {
+    if (low < high) {
+        int pi = partition(arr, low, high);
+        quick_sort(arr, low, pi-1);
+        quick_sort(arr, pi+1, high);
     }
-
-    int mid = n / 2; // 找到中间位置
-    int *left = merge_sort(arr, mid); // 递归排序左半部分
-    int *right = merge_sort(arr + mid, n - mid); // 递归排序右半部分
-
-    int *result = merge_array(left, mid, right, n - mid); // 合并两部分
-
-    free(left); // 释放左半部分内存
-    free(right); // 释放右半部分内存
-
-    return result;
 }
 
+// 7. 堆排序
+void heapify(int arr[], int n, int i) {
+    int largest = i;
+    int l = 2*i + 1;
+    int r = 2*i + 2;
+
+    if (l < n && arr[l] > arr[largest])
+        largest = l;
+    if (r < n && arr[r] > arr[largest])
+        largest = r;
+
+    if (largest != i) {
+        int swap = arr[i];
+        arr[i] = arr[largest];
+        arr[largest] = swap;
+        heapify(arr, n, largest);
+    }
+}
+
+void heap_sort(int arr[], int n) {
+    for (int i = n/2 - 1; i >= 0; i--)
+        heapify(arr, n, i);
+
+    for (int i = n-1; i > 0; i--) {
+        int temp = arr[0];
+        arr[0] = arr[i];
+        arr[i] = temp;
+        heapify(arr, i, 0);
+    }
+}
+
+// 8. 计数排序
+void counting_sort(int arr[], int n) {
+    int max = arr[0], min = arr[0];
+    for (int i = 1; i < n; i++) {
+        if (arr[i] > max) max = arr[i];
+        if (arr[i] < min) min = arr[i];
+    }
+    int range = max - min + 1;
+    int* count = (int*)calloc(range, sizeof(int));
+    int* output = (int*)malloc(n * sizeof(int));
+
+    for (int i = 0; i < n; i++)
+        count[arr[i] - min]++;
+
+    for (int i = 1; i < range; i++)
+        count[i] += count[i-1];
+
+    for (int i = n-1; i >= 0; i--) {
+        output[count[arr[i] - min] - 1] = arr[i];
+        count[arr[i] - min]--;
+    }
+
+    for (int i = 0; i < n; i++)
+        arr[i] = output[i];
+
+    free(count);
+    free(output);
+}
+
+// 9. 桶排序
+void bucket_sort(float arr[], int n) {
+    const int num_buckets = 10;
+    struct Node {
+        float data;
+        struct Node* next;
+    };
+    struct Node* buckets[num_buckets] = {NULL};
+
+    for (int i = 0; i < n; i++) {
+        int bi = num_buckets * arr[i];
+        struct Node* newNode = (struct Node*)malloc(sizeof(struct Node));
+        newNode->data = arr[i];
+        newNode->next = buckets[bi];
+        buckets[bi] = newNode;
+    }
+
+    int index = 0;
+    for (int i = 0; i < num_buckets; i++) {
+        struct Node* current = buckets[i];
+        while (current) {
+            arr[index++] = current->data;
+            current = current->next;
+        }
+    }
+}
+
+// 10. 基数排序
+void radix_sort(int arr[], int n) {
+    int max = arr[0];
+    for (int i = 1; i < n; i++)
+        if (arr[i] > max) max = arr[i];
+
+    for (int exp = 1; max/exp > 0; exp *= 10) {
+        int output[n];
+        int count[10] = {0};
+
+        for (int i = 0; i < n; i++)
+            count[(arr[i]/exp)%10]++;
+
+        for (int i = 1; i < 10; i++)
+            count[i] += count[i-1];
+
+        for (int i = n-1; i >= 0; i--) {
+            output[count[(arr[i]/exp)%10] - 1] = arr[i];
+            count[(arr[i]/exp)%10]--;
+        }
+
+        for (int i = 0; i < n; i++)
+            arr[i] = output[i];
+    }
+}
+
+// 测试函数
+int main() {
+    int arr[] = {64, 34, 25, 12, 22, 11, 90};
+    int n = sizeof(arr)/sizeof(arr[0]);
+    
+    // 调用需要的排序算法，例如：
+    bubble_sort(arr, n);
+    
+    printf("Sorted array: \n");
+    for (int i=0; i < n; i++)
+        printf("%d ", arr[i]);
+    return 0;
+}
